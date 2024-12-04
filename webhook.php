@@ -1,4 +1,4 @@
-<?php
+ing<?php
 // Configuration
 
 $verify_token = "agrachat_test";
@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $user_id = $change['value']['from']['id'];
                         if (stripos($comment, 'keyword') !== false) {
                             file_put_contents($log_file, "$user_id\n", FILE_APPEND);
-                            sendDM($user_id, "Here's your link: https://example.com");
-                            file_put_contents($user_id, "OK6\n", FILE_APPEND);
+                            sendDM($user_id, "Testing api");
+                            file_put_contents($log_file, "OK6\n", FILE_APPEND);
                         }
                     }
 
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $message = $change['value']['text'];
                         $sender_id = $change['value']['from']['id'];
                         if (stripos($message, 'keyword') !== false) {
-                            sendDM($sender_id, "Thank you for your message. Here's your link: https://example.com");
+                            sendDM($sender_id, "Testing api");
                         }
                     }
                 }
