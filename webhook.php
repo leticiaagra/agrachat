@@ -1,7 +1,7 @@
 <?php
 // Configuration
 $verify_token = "agrachat_test";
-$access_token = "EAApOL0kRobMBOwI9qGBBg1s5YyXltA6pEaQeEXZAA8D53muBJYIC8whrDQbt0Ta99RAZCUeOpIzMzVpz3UvgZBsxgQJNmQEttrzJqJvNH4yFeOIggwnN505H4UoOq0uD30Q6rRV1j22ZBEdOeV5V09QnGKvsxKGYBt0CnPE8RvP2jAbgxMuv5AtaYphkBtDpLV7ZAV5ZAlGFHUmczjuAZDZD";
+$access_token = "IGQWRNWV84cnJQMU9DZAkVrYTFkWE9hRlZAXdFBSRGN6U2tGckdRdzNhODkxX1RVajRXcWpqVURaQk92Y0kwUldGYUt5MDhIa0ZA1X0EzZA3lNelJuSzJFY05yT2FZASmt0MVVNTEY2eUt2MTI3dFJtRzZAvLWliTmZAFN3cZD";
 $log_file = "webhook_log.txt";
 
 // Handle Facebook Webhook Verification (GET Request)
