@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-VERIFY_TOKEN = "your_verify_token"
+VERIFY_TOKEN = "agrachat_test"
 
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
