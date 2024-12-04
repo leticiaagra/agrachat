@@ -2,6 +2,12 @@
 $verify_token = "agrachat_test";
 $log_file = "webhook_log.txt"; // Log file path
 
+$log_file = "webhook_log.txt";
+file_put_contents($log_file, "Request received:\n", FILE_APPEND);
+file_put_contents($log_file, "Method: " . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
+file_put_contents($log_file, "Headers:\n" . json_encode(getallheaders()) . "\n", FILE_APPEND);
+file_put_contents($log_file, "Body:\n" . file_get_contents('php://input') . "\n\n", FILE_APPEND);
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['hub_verify_token'])) {
     // Facebook webhook verification
     if ($_GET['hub_verify_token'] === $verify_token) {
