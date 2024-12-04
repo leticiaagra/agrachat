@@ -1,50 +1,56 @@
 <?php
-// File: instagram_webhook.php
 
-// Set the log file path
-$logFile = 'instagram_webhook_log.txt';
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
-// Facebook verification token
-$verifyToken = 'agrachat_test';
+define('VERIFY_TOKEN', 'agrachat_test');
 
+// Define the route for the webhook
+Route::match(['get', 'post'], '/webhook', function (Request $request) {
+    if ($request->isMethod('get')) {
+        // Verify the webhook
+        $verifyToken = $request->query('hub_verify_token');
+        if ($verifyToken === VERIFY_TOKEN) {
+            return response($request->query('hub_challenge'), 200);
+        }
+        return response('Forbidden', 403);
+    } elseif ($request->isMethod('post')) {
+        // Handle incoming webhook events
+        $data = $request->json()->all();
+        error_log('Webhook received: ' . json_encode($data));
+        handleWebhookEvent($data); // Custom function to process the event
+        return response('OK', 200);
+    }
+});
 
-// Handle GET requests (verification challenge)
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Verify the request
-    if ($_GET['hub_verify_token'] === $verifyToken) {
-        echo $_GET['hub_challenge'];
-        http_response_code(200);
-        exit;
-    } else {
-        echo 'Invalid verify token';
-        http_response_code(403);
-        exit;
+/**
+ * Process the incoming webhook data.
+ *
+ * @param array $data
+ */
+function handleWebhookEvent(array $data)
+{
+    if (isset($data['entry']) && is_array($data['entry'])) {
+        foreach ($data['entry'] as $entry) {
+            // Handle messaging events
+            if (isset($entry['messaging']) && is_array($entry['messaging'])) {
+                foreach ($entry['messaging'] as $message) {
+                    $senderId = $message['sender']['id'] ?? null;
+                    $messageText = $message['message']['text'] ?? null;
+                    if ($messageText) {
+                        error_log("Received message from {$senderId}: {$messageText}");
+                    }
+                }
+            }
+            // Handle changes events
+            if (isset($entry['changes']) && is_array($entry['changes'])) {
+                foreach ($entry['changes'] as $change) {
+                    if (isset($change['field']) && $change['field'] === 'comments') {
+                        $comment = $change['value'];
+                        error_log("New comment: " . json_encode($comment));
+                    }
+                }
+            }
+        }
     }
 }
-
-// Handle POST requests (payload reception)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    // Get the raw POST body
-    $payload = file_get_contents('php://input');
-    file_put_contents($logFile, file_get_contents('php://input') . "\n", FILE_APPEND);
-
-    // Decode the JSON payload
-    $data = json_decode($payload, true);
-
-    // Append the payload to the log file
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Payload Received:\n", FILE_APPEND);
-    file_put_contents($logFile, print_r($data, true), FILE_APPEND);
-    file_put_contents($logFile, "\n--------------------\n", FILE_APPEND);
-
-    // Respond with a 200 status to acknowledge receipt
-    
-    echo 'Payload received';
-    http_response_code(200);
-    exit;
-}
-
-// If no valid request method
-http_response_code(405);
-echo 'Method Not Allowed';
-exit;
