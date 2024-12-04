@@ -28,7 +28,6 @@ function sendDM($recipient_id, $message) {
 
     $context = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
-    file_put_contents("dm_log.txt", "Authorization Header: Bearer $access_token\n", FILE_APPEND);
 
     if ($result === false) {
         file_put_contents("dm_log.txt", "Failed to send DM. Error: " . error_get_last()['message'] . "\n", FILE_APPEND);
@@ -71,10 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     // Handle Instagram Messages
                     if ($change['field'] === 'messages') {
+                        file_put_contents($log_file, "OK2\n", FILE_APPEND);
                         $message = $change['value']['text'];
                         $sender_id = $change['value']['from']['id'];
                         if (stripos($message, 'keyword') !== false) {
+                            file_put_contents($log_file, "OK3\n", FILE_APPEND);
                             sendDM($sender_id, "Testing api");
+                            file_put_contents($log_file, "OK6\n", FILE_APPEND);
                         }
                     }
                 }
