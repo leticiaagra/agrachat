@@ -7,6 +7,9 @@ $logFile = 'instagram_webhook_log.txt';
 // Facebook verification token
 $verifyToken = 'agrachat_test';
 
+file_put_contents($logFile, "Script executed: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+file_put_contents($logFile, "Raw POST data: " . file_get_contents('php://input') . "\n", FILE_APPEND);
+
 // Handle GET requests (verification challenge)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Verify the request
