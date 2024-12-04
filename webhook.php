@@ -1,6 +1,6 @@
 <?php
 $log_file = "webhook_log.txt";
-$access_token = "your_instagram_graph_api_access_token";
+$access_token = "EAApOL0kRobMBOwI9qGBBg1s5YyXltA6pEaQeEXZAA8D53muBJYIC8whrDQbt0Ta99RAZCUeOpIzMzVpz3UvgZBsxgQJNmQEttrzJqJvNH4yFeOIggwnN505H4UoOq0uD30Q6rRV1j22ZBEdOeV5V09QnGKvsxKGYBt0CnPE8RvP2jAbgxMuv5AtaYphkBtDpLV7ZAV5ZAlGFHUmczjuAZDZD";
 
 // Log payload for debugging
 $payload = file_get_contents('php://input');
