@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 // Handle POST requests (payload reception)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    http_response_code(200);
     // Get the raw POST body
     $payload = file_get_contents('php://input');
     file_put_contents($logFile, file_get_contents('php://input') . "\n", FILE_APPEND);
@@ -39,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     file_put_contents($logFile, "\n--------------------\n", FILE_APPEND);
 
     // Respond with a 200 status to acknowledge receipt
-    http_response_code(200);
+    
     echo 'Payload received';
     exit;
 }
