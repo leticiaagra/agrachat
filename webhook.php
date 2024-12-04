@@ -21,8 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
 
-    // Log data for debugging
-    file_put_contents("webhook_log.txt", print_r($data, true), FILE_APPEND);
+    // Log headers and method type
+    file_put_contents("webhook_log.txt", print_r($_SERVER, true), FILE_APPEND);
+    file_put_contents("webhook_log.txt", "Method: " . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
+
 
     // Acknowledge receipt
     echo "OK";
