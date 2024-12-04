@@ -3,7 +3,7 @@ ing<?php
 
 $processed_comments_file = "processed_comments.txt";
 $verify_token = "agrachat_test";
-$access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
+$access_token = "EAAM3VAqejpsBOZByDVECKDcQbwqdZAhCeY9DA61ohbgP594e2UpI2KgQ9zUibaXvgjwDEsZBE3K77X8uXZB1yR2JiZCG5XJoERRnVJFaeAnMGwAtTMMjecQpiTj8gsDkdmezyKdZBuAP5y5E8iEpDstSyRHJDZCbdB1qUyUOGsWvLMpFlxZAUVNwr4tJzOHP92ECDvsZBvc9vyNH4jF8gmgZDZD";
 $log_file = "webhook_log.txt";
 
  // Function to Send Direct Messages
