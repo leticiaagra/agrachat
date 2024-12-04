@@ -1,5 +1,6 @@
 <?php
 $verify_token = "agrachat_test";
+$log_file = "webhook_log.txt"; // Log file path
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['hub_verify_token'])) {
     // Facebook webhook verification
@@ -17,8 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Read the JSON payload sent by Facebook
     $payload = file_get_contents('php://input');
 
-    // Log that the payload has been received
-    error_log("Payload received from Facebook: " . $payload);
+    // Log payload received from Facebook
+    file_put_contents($log_file, "Payload received from Facebook:\n", FILE_APPEND);
+    file_put_contents($log_file, $payload . "\n\n", FILE_APPEND);
 
     // Forward the payload to your Python app
     $ch = curl_init('http://localhost:5000/webhook'); // Python app URL
