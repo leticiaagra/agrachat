@@ -31,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $comment = $change['value']['text'];
                         $user_id = $change['value']['from']['id'];
                         if (stripos($comment, 'keyword') !== false) {
-                            file_put_contents($log_file, "OK4\n", FILE_APPEND);
+                            file_put_contents($log_file, "$user_id\n", FILE_APPEND);
                             sendDM("6449027881841171", "Here's your link: https://example.com");
-                            file_put_contents($log_file, "OK6\n", FILE_APPEND);
+                            file_put_contents($user_id, "OK6\n", FILE_APPEND);
                         }
                     }
 
