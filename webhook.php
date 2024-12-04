@@ -1,7 +1,6 @@
 <?php
 // Configuration
 
-global $verify_token, $access_token; $log_file
 $verify_token = "agrachat_test";
 $access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
 $log_file = "webhook_log.txt";
@@ -33,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $user_id = $change['value']['from']['id'];
                         if (stripos($comment, 'keyword') !== false) {
                             file_put_contents($log_file, "OK4\n", FILE_APPEND);
-                            sendDM($user_id, "Here's your link: https://example.com");
+                            sendDM("6449027881841171", "Here's your link: https://example.com");
                             file_put_contents($log_file, "OK6\n", FILE_APPEND);
                         }
                     }
