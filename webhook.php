@@ -1,7 +1,7 @@
 <?php
 // Configuration
 $verify_token = "agrachat_test";
-$access_token = "IGQWRNWV84cnJQMU9DZAkVrYTFkWE9hRlZAXdFBSRGN6U2tGckdRdzNhODkxX1RVajRXcWpqVURaQk92Y0kwUldGYUt5MDhIa0ZA1X0EzZA3lNelJuSzJFY05yT2FZASmt0MVVNTEY2eUt2MTI3dFJtRzZAvLWliTmZAFN3cZD";
+$access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
 $log_file = "webhook_log.txt";
 
 
