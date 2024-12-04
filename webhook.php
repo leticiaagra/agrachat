@@ -5,6 +5,30 @@ $verify_token = "agrachat_test";
 $access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
 $log_file = "webhook_log.txt";
 
+ // Function to Send Direct Messages
+function sendDM($recipient_id, $message) {
+    file_put_contents($log_file, "OK5\n", FILE_APPEND);
+    $access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
+    $url = "https://graph.facebook.com/v21.0/350830891436655/messages";
+
+    $data = [
+        "recipient" => ["id" => $recipient_id],
+        "message" => ["text" => $message],
+    ];
+
+    $options = [
+        'http' => [
+            'header'  => "Content-Type: application/json\r\nAuthorization: Bearer $access_token\r\n",
+            'method'  => 'POST',
+            'content' => json_encode($data),
+        ],
+    ];
+
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    file_put_contents("dm_log.txt", "DM sent to $recipient_id: $message\nResult: $result\n\n", FILE_APPEND);
+}
+
 
 
 // Handle Webhook Payload (POST Request)
@@ -32,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $user_id = $change['value']['from']['id'];
                         if (stripos($comment, 'keyword') !== false) {
                             file_put_contents($log_file, "$user_id\n", FILE_APPEND);
-                            sendDM("6449027881841171", "Here's your link: https://example.com");
+                            sendDM($user_id, "Here's your link: https://example.com");
                             file_put_contents($user_id, "OK6\n", FILE_APPEND);
                         }
                     }
@@ -62,29 +86,6 @@ echo "Bad Request";
 exit;
 
 
-// Function to Send Direct Messages
-function sendDM($recipient_id, $message) {
-    file_put_contents($log_file, "OK5\n", FILE_APPEND);
-    global $access_token;
-    $url = "https://graph.facebook.com/v21.0/350830891436655/messages";
-
-    $data = [
-        "recipient" => ["id" => $recipient_id],
-        "message" => ["text" => $message],
-    ];
-
-    $options = [
-        'http' => [
-            'header'  => "Content-Type: application/json\r\nAuthorization: Bearer $access_token\r\n",
-            'method'  => 'POST',
-            'content' => json_encode($data),
-        ],
-    ];
-
-    $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-    file_put_contents("dm_log.txt", "DM sent to $recipient_id: $message\nResult: $result\n\n", FILE_APPEND);
-}
 
 // Handle Facebook Webhook Verification (GET Request)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -99,5 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 }
 
+   
 
 ?>
