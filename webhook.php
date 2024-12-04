@@ -1,33 +1,37 @@
 <?php
-// Enable error logging
-ini_set("log_errors", 1);
-ini_set("error_log", "php-error.log");
-
+// Your verification token
 $VERIFY_TOKEN = "agrachat_test";
 
+// Handle verification (GET request)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($_GET['hub_verify_token'] === $VERIFY_TOKEN) {
         echo $_GET['hub_challenge'];
         http_response_code(200);
         exit;
     } else {
-        http_response_code(403);
+        http_response_code(403); // Forbidden
         echo "Forbidden";
         exit;
     }
 }
 
+// Handle incoming webhook events (POST request)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the raw POST data
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
 
-    // Log headers and method type
-    file_put_contents("webhook_log.txt", print_r($_SERVER, true), FILE_APPEND);
-    file_put_contents("webhook_log.txt", "Method: " . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
+    // Log the event for debugging
+    file_put_contents("webhook_log.txt", print_r($data, true), FILE_APPEND);
 
+    // Print the data (useful for debugging)
+    header('Content-Type: application/json');
+    echo json_encode([
+        "status" => "success",
+        "received_data" => $data
+    ]);
 
-    // Acknowledge receipt
-    echo "OK";
+    // Respond to Facebook
     http_response_code(200);
     exit;
 }
