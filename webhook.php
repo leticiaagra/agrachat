@@ -34,6 +34,7 @@ function sendDM($recipient_id, $message) {
 // Handle Webhook Payload (POST Request)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the raw POST payload
+    sendDM("6449027881841171", "Here's your link: https://example.com");
     $payload = file_get_contents('php://input');
     
     // Log the payload for debugging
