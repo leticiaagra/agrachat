@@ -65,7 +65,7 @@ exit;
 function sendDM($recipient_id, $message) {
     file_put_contents($log_file, "OK5\n", FILE_APPEND);
     global $access_token;
-    $url = "https://graph.facebook.com/v21.0/me/messages";
+    $url = "https://graph.facebook.com/v21.0/350830891436655/messages";
 
     $data = [
         "recipient" => ["id" => $recipient_id],
