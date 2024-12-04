@@ -51,6 +51,36 @@ function markAsProcessed($comment_id) {
     file_put_contents($processed_comments_file, $comment_id . PHP_EOL, FILE_APPEND);
 }
 
+function replyToComment($comment_id, $reply_message) {
+    global $access_token;
+    $url = "https://graph.facebook.com/v17.0/$comment_id/replies";
+
+    $data = [
+        "message" => $reply_message,
+    ];
+
+    $options = [
+        'http' => [
+            'header'  => "Content-Type: application/json\r\nAuthorization: Bearer $access_token\r\n",
+            'method'  => 'POST',
+            'content' => json_encode($data),
+        ],
+    ];
+
+    // Log API request details
+    file_put_contents("comment_reply_log.txt", "Reply Request Data: " . json_encode($data) . "\n", FILE_APPEND);
+
+    $context = stream_context_create($options);
+    $result = @file_get_contents($url, false, $context);
+
+    if ($result === false) {
+        $error = error_get_last();
+        file_put_contents("comment_reply_log.txt", "HTTP Error: {$error['message']}\n", FILE_APPEND);
+    } else {
+        file_put_contents("comment_reply_log.txt", "Reply API Response: $result\n", FILE_APPEND);
+    }
+}
+
 // Webhook Verification (GET)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['hub_verify_token']) && $_GET['hub_verify_token'] === $verify_token) {
@@ -95,6 +125,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             file_put_contents($log_file, "OK4 - Comment keyword matched: $user_id\n", FILE_APPEND);
                             sendDM($user_id, "Testing API Comment Response");
                             file_put_contents($log_file, "OK5 - Comment DM sent to $user_id\n", FILE_APPEND);
+
+                           // Reply to comment
+                           replyToComment($comment_id, "Hey, I sent you a DM!");
+                           file_put_contents($log_file, "OK6 - Reply sent to comment $comment_id\n", FILE_APPEND);
 
                             // Mark as processed
                             markAsProcessed($comment_id);
