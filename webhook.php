@@ -69,7 +69,7 @@ exit;
 // Function to Send Direct Messages
 function sendDM($recipient_id, $message) {
     global $access_token;
-    $url = "https://graph.facebook.com/v17.0/me/messages";
+    $url = "https://graph.facebook.com/v21.0/me/messages";
 
     $data = [
         "recipient" => ["id" => $recipient_id],
