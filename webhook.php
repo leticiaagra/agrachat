@@ -4,8 +4,6 @@ ing<?php
 $verify_token = "agrachat_test";
 $access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
 $log_file = "webhook_log.txt";
-// File to store processed comment IDs
-$processed_comments_file = "processed_comments.txt";
 
  // Function to Send Direct Messages
 function sendDM($recipient_id, $message) {
@@ -40,18 +38,18 @@ function sendDM($recipient_id, $message) {
 
 
 
-function hasBeenProcessed($comment_id) {
-    global $processed_comments_file;
-    $processed_ids = file_exists($processed_comments_file) ? file($processed_comments_file, FILE_IGNORE_NEW_LINES) : [];
-    return in_array($comment_id, $processed_ids);
-}
+// Handle Webhook Payload (POST Request)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the raw POST payload
+    $payload = file_get_contents('php://input');
+    
+    // Log the payload for debugging
+    file_put_contents($log_file, "Payload received:\n$payload\n\n", FILE_APPEND);
+    
+    // Decode the JSON payload
+    $data = json_decode($payload, true);
 
-function markAsProcessed($comment_id) {
-    global $processed_comments_file;
-    file_put_contents($processed_comments_file, $comment_id . PHP_EOL, FILE_APPEND);
-}
-
-// Check for entries in the payload
+   // Check for entries in the payload
 if (isset($data['entry'])) {
     file_put_contents($log_file, "OK1 - Entry found\n", FILE_APPEND);
     foreach ($data['entry'] as $entry) {
@@ -61,24 +59,12 @@ if (isset($data['entry'])) {
             foreach ($entry['changes'] as $change) {
                 if ($change['field'] === 'comments') {
                     file_put_contents($log_file, "OK3 - Processing comments\n", FILE_APPEND);
-                    $comment_id = $change['value']['id'];
                     $comment = $change['value']['text'];
                     $user_id = $change['value']['from']['id'];
-
-                    // Check if the comment has already been processed
-                    if (hasBeenProcessed($comment_id)) {
-                        file_put_contents($log_file, "SKIP - Comment $comment_id already processed\n", FILE_APPEND);
-                        continue;
-                    }
-
-                    // Process the comment
                     if (stripos($comment, 'keyword') !== false) {
                         file_put_contents($log_file, "OK4 - Comment keyword matched: $user_id\n", FILE_APPEND);
                         sendDM($user_id, "Testing API Comment Response");
                         file_put_contents($log_file, "OK5 - Comment DM sent to $user_id\n", FILE_APPEND);
-
-                        // Mark the comment as processed
-                        markAsProcessed($comment_id);
                     }
                 }
             }
@@ -90,7 +76,6 @@ if (isset($data['entry'])) {
             foreach ($entry['messaging'] as $message_event) {
                 $message = $message_event['message']['text'] ?? null; // Ensure message text exists
                 $sender_id = $message_event['sender']['id'] ?? null; // Ensure sender ID exists
-
                 if ($message && $sender_id) {
                     file_put_contents($log_file, "OK3 - Processing message: $message by $sender_id\n", FILE_APPEND);
                     if (stripos($message, 'keyword') !== false) {
@@ -103,6 +88,17 @@ if (isset($data['entry'])) {
         }
     }
 }
+
+    // Send a 200 OK response to acknowledge receipt
+    http_response_code(200);
+    echo json_encode(["status" => "processed"]);
+    exit;
+}
+
+// If the request method is neither GET nor POST, return a 400 Bad Request
+http_response_code(400);
+echo "Bad Request";
+exit;
 
 
 
