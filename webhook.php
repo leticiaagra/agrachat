@@ -68,15 +68,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
 
-                    // Handle Instagram Messages
-                    if ($change['field'] === 'messages') {
-                        file_put_contents($log_file, "OK2\n", FILE_APPEND);
-                        $message = $change['value']['text'];
-                        $sender_id = $change['value']['from']['id'];
-                        if (stripos($message, 'keyword') !== false) {
-                            file_put_contents($log_file, "OK3\n", FILE_APPEND);
-                            sendDM($sender_id, "Testing api DM");
-                            file_put_contents($log_file, "OK6\n", FILE_APPEND);
+         // Handle Instagram Messages
+              if (isset($entry['messaging'])) { 
+                   file_put_contents($log_file, "OK2\n", FILE_APPEND);
+                   $message = $change['value']['text'];
+                   $sender_id = $change['value']['from']['id'];
+                   if (stripos($message, 'keyword') !== false) {
+                       file_put_contents($log_file, "OK3\n", FILE_APPEND);
+                       sendDM($sender_id, "Testing api DM");
+                       file_put_contents($log_file, "OK6\n", FILE_APPEND);
                         }
                     }
                 }
