@@ -1,5 +1,5 @@
 <?php
-$verify_token = "your_verification_token";
+$verify_token = "agrachat_test";
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['hub_verify_token'])) {
     // Facebook webhook verification
@@ -16,7 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['hub_verify_token'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Read the JSON payload sent by Facebook
     $payload = file_get_contents('php://input');
-    
+
+    // Log that the payload has been received
+    error_log("Payload received from Facebook: " . $payload);
+
     // Forward the payload to your Python app
     $ch = curl_init('http://localhost:5000/webhook'); // Python app URL
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -30,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = curl_exec($ch); // Forward the request and capture the response
     curl_close($ch);
 
-    // Log the response for debugging
-    error_log("Forwarded to Python app: $response");
+    // Log the response from the Python app
+    error_log("Response from Python app: " . $response);
 
     // Respond to Facebook webhook
     http_response_code(200);
@@ -40,3 +43,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 http_response_code(400); // Bad request if the method is unsupported
+?>
