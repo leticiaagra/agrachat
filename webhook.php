@@ -7,8 +7,6 @@ $logFile = 'instagram_webhook_log.txt';
 // Facebook verification token
 $verifyToken = 'agrachat_test';
 
-file_put_contents($logFile, "Script executed: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
-file_put_contents($logFile, "Raw POST data: " . file_get_contents('php://input') . "\n", FILE_APPEND);
 
 // Handle GET requests (verification challenge)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -26,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 // Handle POST requests (payload reception)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    http_response_code(200);
+    
     // Get the raw POST body
     $payload = file_get_contents('php://input');
     file_put_contents($logFile, file_get_contents('php://input') . "\n", FILE_APPEND);
@@ -42,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Respond with a 200 status to acknowledge receipt
     
     echo 'Payload received';
+    http_response_code(200);
     exit;
 }
 
