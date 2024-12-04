@@ -28,7 +28,11 @@ function sendDM($recipient_id, $message) {
 
     $context = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
-    file_put_contents("dm_log.txt", "DM sent to $recipient_id: $message\nResult: $result\n\n", FILE_APPEND);
+    if ($result === false) {
+        file_put_contents("dm_log.txt", "Failed to send DM. Error: " . error_get_last()['message'] . "\n", FILE_APPEND);
+    } else {
+        file_put_contents("dm_log.txt", "DM API Response: $result\n", FILE_APPEND);
+    }
 }
 
 
