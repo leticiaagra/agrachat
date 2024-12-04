@@ -7,8 +7,8 @@ $log_file = "webhook_log.txt";
 
  // Function to Send Direct Messages
 function sendDM($recipient_id, $message) {
-    global $log_file; $access_token; // Add this line to access the global variable
-
+    global $log_file;  // Add this line to access the global variable
+    $access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
     file_put_contents($log_file, "OK5\n", FILE_APPEND);
 
     $url = "https://graph.facebook.com/v21.0/me/messages";
