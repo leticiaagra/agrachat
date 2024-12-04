@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the raw POST body
     $payload = file_get_contents('php://input');
+    file_put_contents($logFile, file_get_contents('php://input') . "\n", FILE_APPEND);
 
     // Decode the JSON payload
     $data = json_decode($payload, true);
