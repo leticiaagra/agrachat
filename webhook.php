@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check for entries in the payload
     if (isset($data['entry'])) {
         file_put_contents($log_file, "OK1\n", FILE_APPEND);
-        file_put_contents($log_file, "$data['entry']\n", FILE_APPEND);
+        file_put_contents($log_file, "$data", FILE_APPEND);
         foreach ($data['entry'] as $entry) {
             if (isset($entry['changes'])) {
                 file_put_contents($log_file, "OK2/\n", FILE_APPEND);
