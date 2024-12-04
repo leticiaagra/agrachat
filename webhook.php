@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $user_id = $change['value']['from']['id'];
                         if (stripos($comment, 'keyword') !== false) {
                             file_put_contents($log_file, "$user_id\n", FILE_APPEND);
-                            sendDM($user_id, "Testing api");
+                            sendDM($user_id, "Testing api C");
                             file_put_contents($log_file, "OK6\n", FILE_APPEND);
                         }
                     }
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $sender_id = $change['value']['from']['id'];
                         if (stripos($message, 'keyword') !== false) {
                             file_put_contents($log_file, "OK3\n", FILE_APPEND);
-                            sendDM($sender_id, "Testing api");
+                            sendDM($sender_id, "Testing api DM");
                             file_put_contents($log_file, "OK6\n", FILE_APPEND);
                         }
                     }
