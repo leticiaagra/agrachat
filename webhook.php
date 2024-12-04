@@ -49,40 +49,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Decode the JSON payload
     $data = json_decode($payload, true);
 
-    // Check for entries in the payload
-    if (isset($data['entry'])) {
-        file_put_contents($log_file, "OK1\n", FILE_APPEND);
-        foreach ($data['entry'] as $entry) {
-            if (isset($entry['changes'])) {
-                file_put_contents($log_file, "OK2\n", FILE_APPEND);
-                foreach ($entry['changes'] as $change) {
-                    // Handle Instagram Comments
-                    if ($change['field'] === 'comments') {
-                        file_put_contents($log_file, "OK3\n", FILE_APPEND);
-                        $comment = $change['value']['text'];
-                        $user_id = $change['value']['from']['id'];
-                        if (stripos($comment, 'keyword') !== false) {
-                            file_put_contents($log_file, "$user_id\n", FILE_APPEND);
-                            sendDM($user_id, "Testing api C");
-                            file_put_contents($log_file, "OK6\n", FILE_APPEND);
-                        }
+   // Check for entries in the payload
+if (isset($data['entry'])) {
+    file_put_contents($log_file, "OK1 - Entry found\n", FILE_APPEND);
+    foreach ($data['entry'] as $entry) {
+        // Handle Instagram Comments
+        if (isset($entry['changes'])) {
+            file_put_contents($log_file, "OK2 - Changes found\n", FILE_APPEND);
+            foreach ($entry['changes'] as $change) {
+                if ($change['field'] === 'comments') {
+                    file_put_contents($log_file, "OK3 - Processing comments\n", FILE_APPEND);
+                    $comment = $change['value']['text'];
+                    $user_id = $change['value']['from']['id'];
+                    if (stripos($comment, 'keyword') !== false) {
+                        file_put_contents($log_file, "OK4 - Comment keyword matched: $user_id\n", FILE_APPEND);
+                        sendDM($user_id, "Testing API Comment Response");
+                        file_put_contents($log_file, "OK5 - Comment DM sent to $user_id\n", FILE_APPEND);
                     }
+                }
+            }
+        }
 
-         // Handle Instagram Messages
-              if (isset($entry['messaging'])) { 
-                   file_put_contents($log_file, "OK2\n", FILE_APPEND);
-                   $message = $change['value']['text'];
-                   $sender_id = $change['value']['from']['id'];
-                   if (stripos($message, 'keyword') !== false) {
-                       file_put_contents($log_file, "OK3\n", FILE_APPEND);
-                       sendDM($sender_id, "Testing api DM");
-                       file_put_contents($log_file, "OK6\n", FILE_APPEND);
-                        }
+        // Handle Instagram Messages
+        if (isset($entry['messaging'])) {
+            file_put_contents($log_file, "OK2 - Messaging found\n", FILE_APPEND);
+            foreach ($entry['messaging'] as $message_event) {
+                $message = $message_event['message']['text'] ?? null; // Ensure message text exists
+                $sender_id = $message_event['sender']['id'] ?? null; // Ensure sender ID exists
+                if ($message && $sender_id) {
+                    file_put_contents($log_file, "OK3 - Processing message: $message by $sender_id\n", FILE_APPEND);
+                    if (stripos($message, 'keyword') !== false) {
+                        file_put_contents($log_file, "OK4 - Message keyword matched: $sender_id\n", FILE_APPEND);
+                        sendDM($sender_id, "Testing API DM Response");
+                        file_put_contents($log_file, "OK5 - Message DM sent to $sender_id\n", FILE_APPEND);
                     }
                 }
             }
         }
     }
+}
 
     // Send a 200 OK response to acknowledge receipt
     http_response_code(200);
