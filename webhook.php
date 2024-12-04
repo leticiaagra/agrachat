@@ -7,6 +7,7 @@ $log_file = "webhook_log.txt";
 
  // Function to Send Direct Messages
 function sendDM($recipient_id, $message) {
+    $log_file = "webhook_log.txt"
     file_put_contents($log_file, "OK5\n", FILE_APPEND);
     $access_token = "EAAM3VAqejpsBO2e7PgdJCMbHAuj9Y3ilzbKrcUCTg2TKuZA9xiqqpm9WBQPHIAxzpGDV8lBqFc8TMRcbLufzgGLfoh4tmzNzhw7NGpzcPSsPpuN5AfDGYqwjRCI8EVzmEZAIPIHDoChcs5P6F6qjoCqr88tRiZAxtyv5kiicQLj2g84wohlPgzAFkaPtbWIPNHrH7bC9iTKBCNyBRhLlQorTwZDZD";
     $url = "https://graph.facebook.com/v21.0/350830891436655/messages";
