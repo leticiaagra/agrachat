@@ -1,54 +1,54 @@
 <?php
-$verify_token = "agrachat_test";
-$log_file = "webhook_log.txt"; // Log file path
-
 $log_file = "webhook_log.txt";
-file_put_contents($log_file, "Request received:\n", FILE_APPEND);
-file_put_contents($log_file, "Method: " . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
-file_put_contents($log_file, "Headers:\n" . json_encode(getallheaders()) . "\n", FILE_APPEND);
-file_put_contents($log_file, "Body:\n" . file_get_contents('php://input') . "\n\n", FILE_APPEND);
+$access_token = "your_instagram_graph_api_access_token";
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['hub_verify_token'])) {
-    // Facebook webhook verification
-    if ($_GET['hub_verify_token'] === $verify_token) {
-        echo $_GET['hub_challenge'];
-        http_response_code(200);
-        exit;
-    } else {
-        http_response_code(403);
-        exit;
+// Log payload for debugging
+$payload = file_get_contents('php://input');
+file_put_contents($log_file, "------\nPayload received:\n$payload\n\n", FILE_APPEND);
+
+// Decode the payload
+$data = json_decode($payload, true);
+
+// Process Comments
+if (isset($data['entry'])) {
+    foreach ($data['entry'] as $entry) {
+        if (isset($entry['changes'])) {
+            foreach ($entry['changes'] as $change) {
+                if ($change['field'] === 'comments') {
+                    $comment = $change['value']['text'];
+                    $user_id = $change['value']['from']['id'];
+                    if (stripos($comment, 'keyword') !== false) {
+                        sendDM($user_id, "Here's your link: https://leticiaagra.com.br);
+                    }
+                }
+            }
+        }
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Read the JSON payload sent by Facebook
-    $payload = file_get_contents('php://input');
+// Function to Send Direct Messages
+function sendDM($recipient_id, $message) {
+    global $access_token;
+    $url = "https://graph.facebook.com/v17.0/me/messages";
 
-    // Log payload received from Facebook
-    file_put_contents($log_file, "Payload received from Facebook:\n", FILE_APPEND);
-    file_put_contents($log_file, $payload . "\n\n", FILE_APPEND);
+    $data = [
+        "recipient" => ["id" => $recipient_id],
+        "message" => ["text" => $message],
+    ];
 
-    // Forward the payload to your Python app
-    $ch = curl_init('http://localhost:5000/webhook'); // Python app URL
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($payload))
-    );
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/json\r\nAuthorization: Bearer $access_token\r\n",
+            'method'  => 'POST',
+            'content' => json_encode($data),
+        ],
+    ];
 
-    $response = curl_exec($ch); // Forward the request and capture the response
-    curl_close($ch);
-
-    // Log the response from the Python app
-    error_log("Response from Python app: " . $response);
-
-    // Respond to Facebook webhook
-    http_response_code(200);
-    echo json_encode(["status" => "processed"]);
-    exit;
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    file_put_contents("dm_log.txt", "DM sent to $recipient_id: $message\nResult: $result\n\n", FILE_APPEND);
 }
 
-http_response_code(400); // Bad request if the method is unsupported
+http_response_code(200);
+echo json_encode(["status" => "processed"]);
 ?>
