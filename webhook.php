@@ -3,13 +3,13 @@ ing<?php
 
 $processed_comments_file = "processed_comments.txt";
 $verify_token = "agrachat_test";
-$access_token = "EAAM3VAqejpsBO8TLIX5D4uQNsjU9RNDyYFv506XW1CF0EIjZCx3LsSWUtjAKZBPIFo2HvDAknK2AcXtitonUGAPuVcNjtaRNZBJkasDFNmPBIpqwkGmMbTaSNPgHH9jw3mnN4ZAXeyU9G31JuvUnbn4XixHE4YtFhM9ZCOUa0zSM6MmpUlNbgFReBr5BgGnzinzsFLl2AiwHju5A7Eee6ojaY";
+$access_token = "EAAM3VAqejpsBO3WTivaY5XIbr8ru25TUFWLR1cH4M7oHquImb2ZB5nhjDRkIIwugePUwxpbjnRYH9MPWr16AlZCMh4rwSHZA339ZAe1L5UFGWun3HAM0ne7jTORALVMcEjXZCAjjyq9fQNkUwe9gnzZAGJc97QtHOOp5OVb4Tzvt6KL13Rc4TNJTedyfXEObK632b1H7aEQsAD88AJmKF4KHk8";
 $log_file = "webhook_log.txt";
 
  // Function to Send Direct Messages
 function sendDM($recipient_id, $message) {
     global $log_file;  // Add this line to access the global variable
-    $access_token = "EAAM3VAqejpsBO8TLIX5D4uQNsjU9RNDyYFv506XW1CF0EIjZCx3LsSWUtjAKZBPIFo2HvDAknK2AcXtitonUGAPuVcNjtaRNZBJkasDFNmPBIpqwkGmMbTaSNPgHH9jw3mnN4ZAXeyU9G31JuvUnbn4XixHE4YtFhM9ZCOUa0zSM6MmpUlNbgFReBr5BgGnzinzsFLl2AiwHju5A7Eee6ojaY";
+    $access_token = "EAAM3VAqejpsBO3WTivaY5XIbr8ru25TUFWLR1cH4M7oHquImb2ZB5nhjDRkIIwugePUwxpbjnRYH9MPWr16AlZCMh4rwSHZA339ZAe1L5UFGWun3HAM0ne7jTORALVMcEjXZCAjjyq9fQNkUwe9gnzZAGJc97QtHOOp5OVb4Tzvt6KL13Rc4TNJTedyfXEObK632b1H7aEQsAD88AJmKF4KHk8";
     file_put_contents($log_file, "OK5\n", FILE_APPEND);
 
     $url = "https://graph.facebook.com/v21.0/me/messages";
